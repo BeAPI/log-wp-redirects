@@ -2,7 +2,7 @@
 
 ![WordPress](https://img.shields.io/badge/WordPress-5.8+-green.svg)
 ![PHP](https://img.shields.io/badge/PHP-7.0+-blue.svg)
-![Version](https://img.shields.io/badge/version-1.0.2-blue.svg)
+![Version](https://img.shields.io/badge/version-1.0.3-blue.svg)
 
 **Log WP Redirects** is a powerful WordPress plugin that captures and logs all redirects made through WordPress's built-in `wp_redirect()` function, providing valuable insights for debugging and monitoring.
 
@@ -133,6 +133,14 @@ This project is licensed under the GPLv2 or later license.
 
 ## Changelog
 
+### 1.0.3
+- Replaced custom time formatting with WordPress native human_time_diff() function
+- Added Composer support for easier installation in modern WordPress projects
+- Improved WP-Cron implementation using standard WordPress activation/deactivation hooks
+- Switched from single events to properly scheduled daily events for log cleanup
+- Added optimized database indexes for better performance, especially for cleanup operations
+- Added a composite index (blog_id, date_added) to significantly improve cleanup query performance
+
 ### 1.0.2
 - Added support for the `$x_redirect_by` parameter of wp_redirect() function
 - The source of redirects is now tracked and displayed in the admin interface
@@ -140,7 +148,6 @@ This project is licensed under the GPLv2 or later license.
 - Improved database schema management using WordPress's dbDelta() function
 - Added new filter `lwr_pre_insert_data` to modify data before database insertion
 - Increased field size for x_redirect_by from 100 to 255 characters
-- Added Composer support for easier installation in modern WordPress projects
 
 ### 1.0.1
 - Added new filter `lwr_should_log_redirect` to control which redirects are logged

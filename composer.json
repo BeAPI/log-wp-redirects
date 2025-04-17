@@ -3,6 +3,7 @@
     "description": "Log all WordPress redirections made via wp_redirect() function",
     "type": "wordpress-plugin",
     "license": "GPL-2.0-or-later",
+    "version": "1.0.3",
     "authors": [
         {
             "name": "Be API",

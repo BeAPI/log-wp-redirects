@@ -39,7 +39,10 @@ class LWR_Upgrade
             backtrace LONGTEXT,
             x_redirect_by VARCHAR(255),
             date_added DATETIME,
-            PRIMARY KEY  (id)
+            PRIMARY KEY  (id),
+            KEY blog_id (blog_id),
+            KEY date_added (date_added),
+            KEY blog_date (blog_id, date_added)
         ) $charset_collate;";
         
         // dbDelta() will compare the current table structure with this SQL statement

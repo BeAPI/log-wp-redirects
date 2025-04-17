@@ -3,7 +3,7 @@
 Plugin Name: Log WP Redirects
 Plugin URI: https://github.com/BeAPI/log-wp-redirects
 Description: Log all WordPress redirections made via wp_redirect() function
-Version: 1.0.2
+Version: 1.0.3
 Author: Be API
 Author URI: https://beapi.fr
 Network: true
@@ -22,6 +22,31 @@ if (!defined('LWR_LOG_IP')) {
     define('LWR_LOG_IP', true); // Set to false to disable IP logging
 }
 
+// Au début du fichier, après les définitions de constantes
+register_activation_hook(__FILE__, 'lwr_activate');
+register_deactivation_hook(__FILE__, 'lwr_deactivate');
+
+/**
+ * Plugin activation hook
+ */
+function lwr_activate() {
+    // Schedule the daily cleanup event if not already scheduled
+    if (!wp_next_scheduled('lwr_daily_cleanup')) {
+        wp_schedule_event(time(), 'daily', 'lwr_daily_cleanup');
+    }
+}
+
+/**
+ * Plugin deactivation hook
+ */
+function lwr_deactivate() {
+    // Clear the scheduled event
+    $timestamp = wp_next_scheduled('lwr_daily_cleanup');
+    if ($timestamp) {
+        wp_unschedule_event($timestamp, 'lwr_daily_cleanup');
+    }
+}
+
 class Log_WP_Redirects
 {
     public $query;
@@ -32,7 +57,7 @@ class Log_WP_Redirects
     function __construct() {
 
         // setup variables
-        define( 'LWR_VERSION', '1.0.2' );
+        define( 'LWR_VERSION', '1.0.3' );
         define( 'LWR_DIR', dirname( __FILE__ ) );
         define( 'LWR_URL', plugins_url( '', __FILE__ ) );
         define( 'LWR_BASENAME', plugin_basename( __FILE__ ) );
@@ -41,7 +66,7 @@ class Log_WP_Redirects
         add_action( 'admin_menu', [ $this, 'admin_menu' ] );
         add_action( 'network_admin_menu', [ $this, 'network_admin_menu' ] );
         add_action( 'admin_enqueue_scripts', [ $this, 'admin_scripts' ] );
-        add_action( 'lwr_cleanup_cron', [ $this, 'cleanup' ] );
+        add_action( 'lwr_daily_cleanup', [ $this, 'cleanup' ] );
         add_action( 'wp_ajax_lwr_query', [ $this, 'lwr_query' ] );
         add_action( 'wp_ajax_lwr_network_query', [ $this, 'lwr_network_query' ] );
         add_action( 'wp_ajax_lwr_clear', [ $this, 'lwr_clear' ] );
@@ -67,10 +92,6 @@ class Log_WP_Redirects
 
         new LWR_Upgrade();
         $this->query = new LWR_Query();
-
-        if ( ! wp_next_scheduled( 'lwr_cleanup_cron' ) ) {
-            wp_schedule_single_event( time() + 86400, 'lwr_cleanup_cron' );
-        }
     }
 
 
@@ -327,24 +348,14 @@ class Log_WP_Redirects
     }
     
     
+    /**
+     * Returns human readable time difference between given time and now
+     *
+     * @param string $time MySQL time string
+     * @return string Human readable time difference
+     */
     function time_since( $time ) {
-        $time = current_time( 'timestamp' ) - strtotime( $time );
-        $time = ( $time < 1 ) ? 1 : $time;
-        $tokens = array (
-            31536000 => 'year',
-            2592000 => 'month',
-            604800 => 'week',
-            86400 => 'day',
-            3600 => 'hour',
-            60 => 'minute',
-            1 => 'second'
-        );
-
-        foreach ( $tokens as $unit => $text ) {
-            if ( $time < $unit ) continue;
-            $numberOfUnits = floor( $time / $unit );
-            return $numberOfUnits . ' ' . $text . ( ( $numberOfUnits > 1 ) ? 's' : '' );
-        }
+        return human_time_diff( strtotime( $time ), current_time( 'timestamp' ) );
     }
 }
 

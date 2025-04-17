@@ -4,7 +4,7 @@ Tags: redirect, log, wp_redirect, monitoring, network, multisite
 Requires at least: 5.8
 Tested up to: 6.3
 Requires PHP: 7.0
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -133,6 +133,14 @@ The plugin logs all redirects made through WordPress's standard `wp_redirect()` 
 
 == Changelog ==
 
+= 1.0.3 =
+* Replaced custom time formatting with WordPress native human_time_diff() function
+* Added Composer support for easier installation in modern WordPress projects
+* Improved WP-Cron implementation using standard WordPress activation/deactivation hooks
+* Switched from single events to properly scheduled daily events for log cleanup
+* Added optimized database indexes for better performance, especially for cleanup operations
+* Added a composite index (blog_id, date_added) to significantly improve cleanup query performance
+
 = 1.0.2 =
 * Added support for the `$x_redirect_by` parameter of wp_redirect() function
 * The source of redirects is now tracked and displayed in the admin interface
@@ -140,7 +148,6 @@ The plugin logs all redirects made through WordPress's standard `wp_redirect()` 
 * Improved database schema management using WordPress's dbDelta() function
 * Added new filter `lwr_pre_insert_data` to modify data before database insertion
 * Increased field size for x_redirect_by from 100 to 255 characters
-* Added Composer support for easier installation in modern WordPress projects
 
 = 1.0.1 =
 * Added new filter `lwr_should_log_redirect` to control which redirects are logged
@@ -150,6 +157,9 @@ The plugin logs all redirects made through WordPress's standard `wp_redirect()` 
 * Initial release
 
 == Upgrade Notice ==
+
+= 1.0.3 =
+This update improves time formatting, adds Composer support, enhances the scheduled cleanup process, and optimizes database performance with better indexes.
 
 = 1.0.2 =
 This update adds tracking of redirect sources, database improvements, and a new filter to modify log data before saving.
