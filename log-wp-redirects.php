@@ -3,7 +3,7 @@
 Plugin Name: Log WP Redirects
 Plugin URI: https://github.com/BeAPI/log-wp-redirects
 Description: Log all WordPress redirections made via wp_redirect() function
-Version: 1.0.1
+Version: 1.0.2
 Author: Be API
 Author URI: https://beapi.fr
 Network: true
@@ -32,7 +32,7 @@ class Log_WP_Redirects
     function __construct() {
 
         // setup variables
-        define( 'LWR_VERSION', '1.0.1' );
+        define( 'LWR_VERSION', '1.0.2' );
         define( 'LWR_DIR', dirname( __FILE__ ) );
         define( 'LWR_URL', plugins_url( '', __FILE__ ) );
         define( 'LWR_BASENAME', plugin_basename( __FILE__ ) );
@@ -48,7 +48,7 @@ class Log_WP_Redirects
         add_action( 'wp_ajax_lwr_network_clear', [ $this, 'lwr_network_clear' ] );
         
         // Hook into wp_redirect function
-        add_filter( 'wp_redirect', [ $this, 'capture_redirect' ], 999, 2 );
+        add_filter( 'wp_redirect', [ $this, 'capture_redirect' ], 999, 3 );
         add_filter( 'wp_redirect_status', [ $this, 'capture_status' ], 999, 2 );
     }
 
@@ -189,11 +189,12 @@ class Log_WP_Redirects
     }
 
 
-    function capture_redirect( $location, $status ) {
+    function capture_redirect( $location, $status, $x_redirect_by = 'WordPress' ) {
         // Store the redirect location for later use
         $this->redirect_data = [
             'location' => $location,
             'status' => $status,
+            'x_redirect_by' => $x_redirect_by,
             'referer' => isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '',
             'request_uri' => isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '',
             'user_agent' => isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : '',
@@ -308,8 +309,18 @@ class Log_WP_Redirects
             'ip_address' => $this->redirect_data['ip_address'],
             'cookies' => $this->redirect_data['cookies'],
             'backtrace' => json_encode($this->redirect_data['backtrace']),
+            'x_redirect_by' => isset($this->redirect_data['x_redirect_by']) ? $this->redirect_data['x_redirect_by'] : '',
             'date_added' => current_time('mysql')
         ];
+
+        /**
+         * Filter the data before inserting into database
+         * 
+         * @param array $data The data to be inserted
+         * @param string $location The redirect location
+         * @param int $status The redirect status code
+         */
+        $data = apply_filters('lwr_pre_insert_data', $data, $location, $status);
         
         // Log the redirect
         $wpdb->insert($wpdb->base_prefix . 'lwr_log', $data);

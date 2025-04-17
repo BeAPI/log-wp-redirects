@@ -4,7 +4,7 @@ Tags: redirect, log, wp_redirect, monitoring, network, multisite
 Requires at least: 5.8
 Tested up to: 6.3
 Requires PHP: 7.0
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -57,6 +57,21 @@ add_filter( 'lwr_should_log_redirect', function( $should_log, $status, $location
 }, 10, 4 );
 ```
 
+Modify the data before it's inserted into the database:
+
+```php
+// Example: Remove all cookies information for privacy
+add_filter( 'lwr_pre_insert_data', function( $data, $location, $status ) {
+    // Empty the cookies field
+    $data['cookies'] = '';
+    
+    // Or you could also sanitize/modify other fields
+    // $data['user_agent'] = 'Anonymized';
+    
+    return $data;
+}, 10, 3 );
+```
+
 = Privacy Considerations =
 This plugin logs IP addresses by default. If you need to comply with privacy regulations such as GDPR, you can disable IP logging by defining the following constant in your wp-config.php:
 
@@ -104,6 +119,14 @@ The plugin logs all redirects made through WordPress's standard `wp_redirect()` 
 
 == Changelog ==
 
+= 1.0.2 =
+* Added support for the `$x_redirect_by` parameter of wp_redirect() function
+* The source of redirects is now tracked and displayed in the admin interface
+* Enhanced database structure to accommodate the new data
+* Improved database schema management using WordPress's dbDelta() function
+* Added new filter `lwr_pre_insert_data` to modify data before database insertion
+* Increased field size for x_redirect_by from 100 to 255 characters
+
 = 1.0.1 =
 * Added new filter `lwr_should_log_redirect` to control which redirects are logged
 * Improved code documentation
@@ -112,6 +135,9 @@ The plugin logs all redirects made through WordPress's standard `wp_redirect()` 
 * Initial release
 
 == Upgrade Notice ==
+
+= 1.0.2 =
+This update adds tracking of redirect sources, database improvements, and a new filter to modify log data before saving.
 
 = 1.0.1 =
 This update adds a new filter for more fine-grained control over which redirects are logged.

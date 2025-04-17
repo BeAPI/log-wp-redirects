@@ -10,25 +10,23 @@ class LWR_Upgrade
         $this->last_version = get_option( 'lwr_version' );
 
         if ( version_compare( $this->last_version, $this->version, '<' ) ) {
-            if ( version_compare( $this->last_version, '0.1.0', '<' ) ) {
-                require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-                $this->clean_install();
-            }
-            else {
-                $this->run_upgrade();
-            }
-
+            require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+            $this->upgrade_database();
             update_option( 'lwr_version', $this->version );
         }
     }
 
-
-    private function clean_install() {
+    /**
+     * Upgrade the database schema using dbDelta()
+     */
+    private function upgrade_database() {
         global $wpdb;
-
-        $sql = "
-        CREATE TABLE IF NOT EXISTS {$wpdb->base_prefix}lwr_log (
-            id BIGINT unsigned not null auto_increment,
+        
+        $charset_collate = $wpdb->get_charset_collate();
+        $table_name = $wpdb->base_prefix . 'lwr_log';
+        
+        $sql = "CREATE TABLE $table_name (
+            id BIGINT unsigned NOT NULL auto_increment,
             blog_id BIGINT,
             location TEXT,
             status VARCHAR(10),
@@ -39,17 +37,13 @@ class LWR_Upgrade
             ip_address VARCHAR(45),
             cookies TEXT,
             backtrace LONGTEXT,
+            x_redirect_by VARCHAR(255),
             date_added DATETIME,
-            PRIMARY KEY (id)
-        ) DEFAULT CHARSET=utf8mb4";
+            PRIMARY KEY  (id)
+        ) $charset_collate;";
         
-        $wpdb->query( $sql );
-    }
-
-
-    private function run_upgrade() {
-        global $wpdb;
-        
-        // For future upgrades
+        // dbDelta() will compare the current table structure with this SQL statement
+        // and add/modify the table as needed
+        dbDelta( $sql );
     }
 } 
