@@ -32,10 +32,28 @@
 
 ## Installation
 
+### Standard Installation
+
 1. Upload the `log-wp-redirects` folder to your `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
 3. For single sites, access logs via Tools > Log WP Redirects
 4. For multisite, access network-wide logs via Network Admin > Settings > Log WP Redirects
+
+### Composer Installation
+
+You can install this plugin via Composer:
+
+```bash
+composer require beapi/log-wp-redirects
+```
+
+Or add it to your `composer.json` file:
+
+```json
+"require": {
+    "beapi/log-wp-redirects": "^1.0"
+}
+```
 
 ## Usage
 
@@ -122,6 +140,7 @@ This project is licensed under the GPLv2 or later license.
 - Improved database schema management using WordPress's dbDelta() function
 - Added new filter `lwr_pre_insert_data` to modify data before database insertion
 - Increased field size for x_redirect_by from 100 to 255 characters
+- Added Composer support for easier installation in modern WordPress projects
 
 ### 1.0.1
 - Added new filter `lwr_should_log_redirect` to control which redirects are logged
