@@ -1,0 +1,169 @@
+/* table */
+
+.widefat td {
+    font-size: 12px;
+}
+
+.lwr-listing tbody tr:nth-child(even) td {
+    background-color: #f8f8f8;
+}
+
+.widefat .field-status,
+.widefat .field-date {
+    width: 100px;
+}
+
+.widefat .field-username,
+.widefat .field-blog-name {
+    width: 150px;
+}
+
+.widefat .field-location,
+.widefat .field-request-uri {
+    word-break: break-word;
+}
+
+.redirect-backtrace {
+    max-height: 300px;
+    font-family: monospace;
+    white-space: pre-wrap;
+    overflow: auto;
+    background: #f8f8f8;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+.redirect-backtrace ol {
+    margin-left: 20px;
+}
+
+.redirect-backtrace li {
+    margin-bottom: 10px;
+}
+
+/* Network admin */
+
+.lwr-network-stats {
+    margin-bottom: 30px;
+}
+
+.lwr-network-stats h3 {
+    margin-bottom: 10px;
+}
+
+.lwr-stats-table th {
+    padding: 8px;
+    text-align: left;
+}
+
+.lwr-stats-table td {
+    padding: 10px;
+}
+
+.lwr-stats-table td:last-child {
+    text-align: right;
+}
+
+.lwr-view-site,
+.lwr-clear-site {
+    margin-left: 5px;
+}
+
+/* actions */
+
+.lwr-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.lwr-filter {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.lwr-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+/* pager */
+
+.lwr-pager {
+    padding: 10px 0;
+    text-align: right;
+}
+
+.lwr-page {
+    display: inline-block;
+    padding: 0px 4px;
+    margin-right: 6px;
+    cursor: pointer;
+}
+
+.lwr-page.active {
+    font-weight: bold;
+    cursor: default;
+}
+
+/* grid */
+
+.wrapper {
+  display: grid;
+  grid-template-columns: 50% 50%;
+  grid-gap: 10px;
+}
+
+/* modal */
+
+.media-modal,
+.media-modal-backdrop {
+    display: none;
+}
+
+.media-modal.open,
+.media-modal-backdrop.open {
+    display: block;
+}
+
+.media-frame-title,
+.media-frame-content {
+    left: 0;
+}
+
+.media-frame-router {
+    left: 10px;
+}
+
+.media-frame-content {
+    top: 48px;
+    bottom: 0;
+    overflow: auto;
+}
+
+.button-link.media-modal-close {
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.button-link.media-modal-close.prev {
+    margin-right: 60px;
+}
+
+.button-link.media-modal-close.next {
+    margin-right: 30px;
+}
+
+.media-modal-close.prev .media-modal-icon::before {
+    content: "\f342";
+}
+
+.media-modal-close.next .media-modal-icon::before {
+    content: "\f346";
+}
+
+.modal-content-wrap {
+    padding: 16px;
+} 
