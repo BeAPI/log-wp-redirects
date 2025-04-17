@@ -2,6 +2,7 @@
 
 ![WordPress](https://img.shields.io/badge/WordPress-5.8+-green.svg)
 ![PHP](https://img.shields.io/badge/PHP-7.0+-blue.svg)
+![Version](https://img.shields.io/badge/version-1.0.1-blue.svg)
 
 **Log WP Redirects** is a powerful WordPress plugin that captures and logs all redirects made through WordPress's built-in `wp_redirect()` function, providing valuable insights for debugging and monitoring.
 
@@ -64,6 +65,20 @@ add_filter( 'lwr_expiration_days', function( $days ) {
 });
 ```
 
+### `lwr_should_log_redirect`
+
+Filter which redirects should be logged based on status code or other criteria:
+
+```php
+// Example: Don't log 302 temporary redirects
+add_filter( 'lwr_should_log_redirect', function( $should_log, $status, $location, $redirect_data ) {
+    if ( 302 === $status ) {
+        return false;
+    }
+    return $should_log;
+}, 10, 4 );
+```
+
 ## Privacy Considerations
 
 This plugin logs IP addresses by default. If you need to comply with privacy regulations such as GDPR, you can disable IP logging by defining the following constant in your wp-config.php:
@@ -80,6 +95,15 @@ define('LWR_LOG_IP', false);
 ## License
 
 This project is licensed under the GPLv2 or later license.
+
+## Changelog
+
+### 1.0.1
+- Added new filter `lwr_should_log_redirect` to control which redirects are logged
+- Improved code documentation
+
+### 1.0.0
+- Initial release
 
 ## Credits
 

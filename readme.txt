@@ -4,7 +4,7 @@ Tags: redirect, log, wp_redirect, monitoring, network, multisite
 Requires at least: 5.8
 Tested up to: 6.3
 Requires PHP: 7.0
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -43,6 +43,18 @@ Customize how long logs are kept before being automatically deleted:
 add_filter( 'lwr_expiration_days', function( $days ) {
     return 14; // default = 7
 });
+```
+
+Filter which redirects should be logged based on status code or other criteria:
+
+```php
+// Example: Don't log 302 temporary redirects
+add_filter( 'lwr_should_log_redirect', function( $should_log, $status, $location, $redirect_data ) {
+    if ( 302 === $status ) {
+        return false;
+    }
+    return $should_log;
+}, 10, 4 );
 ```
 
 = Privacy Considerations =
@@ -92,10 +104,17 @@ The plugin logs all redirects made through WordPress's standard `wp_redirect()` 
 
 == Changelog ==
 
+= 1.0.1 =
+* Added new filter `lwr_should_log_redirect` to control which redirects are logged
+* Improved code documentation
+
 = 1.0.0 =
 * Initial release
 
 == Upgrade Notice ==
+
+= 1.0.1 =
+This update adds a new filter for more fine-grained control over which redirects are logged.
 
 = 1.0.0 =
 Initial release of Log WP Redirects. 

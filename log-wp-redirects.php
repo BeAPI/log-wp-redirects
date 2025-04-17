@@ -3,7 +3,7 @@
 Plugin Name: Log WP Redirects
 Plugin URI: https://github.com/BeAPI/log-wp-redirects
 Description: Log all WordPress redirections made via wp_redirect() function
-Version: 1.0.0
+Version: 1.0.1
 Author: Be API
 Author URI: https://beapi.fr
 Network: true
@@ -32,7 +32,7 @@ class Log_WP_Redirects
     function __construct() {
 
         // setup variables
-        define( 'LWR_VERSION', '1.0.0' );
+        define( 'LWR_VERSION', '1.0.1' );
         define( 'LWR_DIR', dirname( __FILE__ ) );
         define( 'LWR_URL', plugins_url( '', __FILE__ ) );
         define( 'LWR_BASENAME', plugin_basename( __FILE__ ) );
@@ -287,6 +287,13 @@ class Log_WP_Redirects
         global $wpdb;
         
         if (empty($location)) {
+            return;
+        }
+        
+        // Allow filtering redirects based on status code or other criteria
+        $should_log = apply_filters('lwr_should_log_redirect', true, $status, $location, $this->redirect_data);
+        
+        if (!$should_log) {
             return;
         }
         
