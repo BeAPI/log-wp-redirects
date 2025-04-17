@@ -20,7 +20,14 @@
 
 ## Screenshots
 
-[Screenshots to be added]
+![Settings Page](.github/assets/screenshot-settings.jpg)
+*Main settings page showing the redirect log interface.*
+
+![Detailed View](.github/assets/screenshot-detail.jpg)
+*Detailed view of a specific redirect with complete stack trace.*
+
+![Network Admin](.github/assets/screenshot-network.jpg)
+*Network admin interface for managing redirects across multiple sites.*
 
 ## Installation
 

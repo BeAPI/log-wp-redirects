@@ -86,9 +86,9 @@ The plugin logs all redirects made through WordPress's standard `wp_redirect()` 
 
 == Screenshots ==
 
-1. Main log view showing redirect details
-2. Detailed view of a specific redirect with backtrace information
-3. Network admin view for multisite installations
+1. Settings page showing the main redirect log interface.
+2. Detailed view of a specific redirect with complete backtrace information.
+3. Network admin view for managing redirects across multiple sites in a WordPress multisite installation.
 
 == Changelog ==
 
