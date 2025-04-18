@@ -1,7 +1,7 @@
 === Log WP Redirects ===
 Contributors: beapi
 Tags: redirect, log, wp_redirect, monitoring, network, multisite
-Requires at least: 5.8
+Requires at least: 5.5
 Tested up to: 6.3
 Requires PHP: 7.0
 Stable tag: 1.0.3
